@@ -1,0 +1,24 @@
+import java.io.*;
+import java.util.*;
+
+public class Visits {
+    static BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
+    static PrintWriter pw = new PrintWriter(System.out);
+
+    public static void main(String[] args) throws IOException {
+        int n = Integer.parseInt(r.readLine());
+
+        int[][] buddies = new int[n][2];
+        int min = Integer.MAX_VALUE;
+        long sum = 0;
+        for (int i = 0; i < n; i ++ ){
+            StringTokenizer st = new StringTokenizer(r.readLine());
+            buddies[i][0] = Integer.parseInt(st.nextToken());
+            buddies[i][1] = Integer.parseInt(st.nextToken());
+            sum += buddies[i][1];
+            min = Math.min(min, buddies[i][1]);
+        }
+        pw.println(sum - min);
+        pw.close();
+    }
+}

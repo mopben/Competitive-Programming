@@ -1,0 +1,57 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+    static BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
+    static PrintWriter pw = new PrintWriter(System.out);
+
+    static HashMap<Integer, Integer> topK = new HashMap<>();
+    public static void main(String[] args) throws IOException {
+
+        StringTokenizer st = new StringTokenizer(r.readLine());
+        int n = Integer.parseInt(st.nextToken());
+        int k = Integer.parseInt(st.nextToken());
+
+        int[] years = new int[n + 1];
+        for (int i = 0; i < n; i ++) {
+            years[i] = Integer.parseInt(r.readLine());
+        }
+
+        Arrays.sort(years);
+        PriorityQueue<Integer> intervals = new PriorityQueue<>(Collections.reverseOrder());
+
+        for (int i = n; i > 0; i --) {
+            intervals.add(years[i] - years[i - 1]);
+        }
+        for (int i = 0; i < k - 1; i ++) {
+            assert intervals.size() >= k - 1;
+            add(intervals.poll());
+        }
+
+        int ans = (years[n] + 12 - (years[n] % 12)) - years[n];
+        int curYear = years[n];
+        for (int i = n - 1; i >= 0; i --) {
+
+            if (topK.containsKey(curYear - years[i])) {
+                ans += (curYear % 12);
+                remove(curYear - years[i]);
+                curYear = i == 0 ? 0 : years[i] + 12 - (years[i] % 12);
+            }
+            ans += curYear - years[i];
+            curYear = years[i];
+        }
+        pw.println(ans);
+        pw.close();
+    }
+    public static void add(int x) {
+        topK.putIfAbsent(x, 0);
+        topK.put(x, topK.get(x) + 1);
+    }
+
+    public static void remove(int x) {
+        topK.put(x, topK.get(x) - 1);
+        if (topK.get(x) == 0) {
+            topK.remove(x);
+        }
+    }
+}

@@ -1,0 +1,47 @@
+import java.io.*;
+import java.util.*;
+
+public class RedistributingGifts
+    static BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
+    static PrintWriter pw = new PrintWriter(System.out);
+
+    static int n;
+    static int[] loc;
+    static int[][] wish;
+    public static void main(String[] args) throws IOException { //note: everything is 1-indexed
+
+        n = Integer.parseInt(r.readLine());
+
+        loc = new int[n + 1];
+        wish = new int[n + 1][n + 1];
+        for (int i = 1; i <= n; i ++) { // i loops from 1-n
+            StringTokenizer st = new StringTokenizer(r.readLine());
+            for (int j = 1; j <= n; j ++) { // j loops from 1-n
+                wish[i][j] = Integer.parseInt(st.nextToken());
+
+                if (wish[i][j] == i) {
+                    loc[i] = j;
+                }
+            }
+        }
+
+        int[] ans = new int[n];
+        for (int i = 0; i < n; i ++) {
+            ans[i] = i + 1;
+        }
+        for (int i = 1; i <= n; i ++) {
+            for (int j = 1; j <= i; j ++) {
+                if (loc[wish[i][j]] >= loc[i]) {
+                    ans[i - 1] = wish[i][j];
+                    break;
+                }
+            }
+        }
+
+        for (int i = 0; i < n; i ++) {
+            pw.println(ans[i]);
+        }
+        pw.close();
+
+    }
+}
